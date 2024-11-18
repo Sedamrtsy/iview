@@ -1,25 +1,11 @@
 import { Request, Response } from 'express';
-import aws from 'aws-sdk';
 import dotenv from 'dotenv';
+import { s3Client } from '../config/s3Client';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import Candidates from '../models/candidates';
 
-// .env dosyasını yükle
-dotenv.config();
-
-// AWS yapılandırmasını .env dosyasından al
-const awsConfig = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: process.env.AWS_REGION,
-  bucketName: process.env.BUCKET_NAME || 'video-uploads'
-};
-
-// AWS S3 yapılandırmasını ayarla
-const s3 = new aws.S3({
-  accessKeyId: awsConfig.accessKeyId,
-  secretAccessKey: awsConfig.secretAccessKey,
-  region: awsConfig.region,
-});
+dotenv.config(); // .env dosyasını yükle
 
 // Presigned URL oluşturma fonksiyonu
 export const generatePresignedUrl = async (
@@ -41,18 +27,17 @@ export const generatePresignedUrl = async (
 
     // S3 için yükleme parametrelerini hazırla
     const params = {
-      Bucket: awsConfig.bucketName,
-      Key: `videos/${Date.now()}_${fileName}`,
-      Expires: 60, // URL'nin geçerli olacağı süre (saniye cinsinden)
-      ContentType: fileType,
-      ACL: 'public-read',
+      Bucket: process.env.AWS_BUCKET_NAME, // Bucket adı
+      Key: `videos/${Date.now()}_${fileName}`, // Dosya adı ve yolu
+      ContentType: fileType, // MIME türü (örneğin: 'video/mp4')
     };
 
     // Presigned URL oluştur
-    const uploadURL = await s3.getSignedUrlPromise('putObject', params);
+    const command = new PutObjectCommand(params);
+    const uploadURL = await getSignedUrl(s3Client, command, { expiresIn: 60 });
 
     // Video URL'sini oluştur
-    const videoURL = `https://${awsConfig.bucketName}.s3.${awsConfig.region}.amazonaws.com/${params.Key}`;
+    const videoURL = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${params.Key}`;
 
     // Veritabanında adayı güncelle
     const candidate = await Candidates.findOneAndUpdate(

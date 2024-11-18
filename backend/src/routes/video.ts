@@ -1,20 +1,22 @@
 import express from 'express';
 import multer from 'multer';
-import AWS from 'aws-sdk';
 import { Request, Response } from 'express';
 import dotenv from 'dotenv';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import Candidates from '../models/candidates'; // Candidates modelini dahil edin
 
 dotenv.config();
-
 const router = express.Router();
-const upload = multer();
+const storage = multer.memoryStorage();
+const upload = multer({storage});
 
 // AWS S3 yapılandırması
-const s3 = new AWS.S3({
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+const s3Client = new S3Client({
   region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
 });
 
 router.post('/upload', upload.single('video'), async (req: Request, res: Response): Promise<void> => {
@@ -31,6 +33,7 @@ router.post('/upload', upload.single('video'), async (req: Request, res: Respons
     } else if (!email) {
       res.status(400).json({ error: 'Email gereklidir.' });
     } else {
+
       const videoBuffer = file.buffer;
       const fileName = `videos/${Date.now()}_${file.originalname}`;
 
@@ -42,7 +45,13 @@ router.post('/upload', upload.single('video'), async (req: Request, res: Respons
       };
 
       // S3'e yükleme yap
-      const uploadResult = await s3.upload(params).promise();
+      const command = new PutObjectCommand(params);
+      await s3Client.send(command);
+      const response = await s3Client.send(command);
+      console.log('AWS S3 Upload Response:', response);
+
+      // Video URL'sini oluştur
+      const videoURL = `https://${process.env.AWS_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
 
       // Video URL'sini MongoDB'ye kaydet
       const candidate = await Candidates.findOneAndUpdate(
@@ -50,14 +59,15 @@ router.post('/upload', upload.single('video'), async (req: Request, res: Respons
         { video_url: fileName }, // `video_url` alanını güncelle
         { new: true, useFindAndModify: false } // Güncellenmiş veriyi döndür
       );
+      console.log('MongoDB Candidate Update Response:', candidate);
 
       if (!candidate) {
         res.status(404).json({ error: 'Aday bulunamadı.' });
       } else {
         // Başarılı yanıt döndür
         res.status(200).json({
-          message: 'Video başarıyla yüklendi ve aday kaydı güncellendi.',
-          url: uploadResult.Location,
+          message: `Video Yüklendi! URL: ${videoURL}`,
+          url: videoURL, // Yüklenen dosyanın URL'si
           candidate,
         });
       }
@@ -67,6 +77,5 @@ router.post('/upload', upload.single('video'), async (req: Request, res: Respons
     res.status(500).json({ error: 'Video yükleme başarısız oldu.' });
   }
 });
-
 
 export default router;
