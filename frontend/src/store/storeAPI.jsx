@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import process from "dotenv";
 
 const API = import.meta.env.VITE_API_LINK; // Vite'deki ortam değişkeni
 const token = sessionStorage.getItem("token");

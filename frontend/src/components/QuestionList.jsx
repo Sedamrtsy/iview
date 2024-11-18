@@ -20,7 +20,7 @@ export default function QuestionList({ isModalOpen, onClose }) {
       setLoading(true);
       const token = sessionStorage.getItem("token");
       try {
-        const response = await fetch("http://localhost:3000/api/getquestion", {
+        const response = await fetch("https://iview.onrender.com/api/getquestion", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

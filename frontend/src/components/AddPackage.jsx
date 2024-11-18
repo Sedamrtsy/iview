@@ -17,7 +17,7 @@ export default function AddPackage({ isModalOpen, onClose }) {
     setLoading(true); // Yükleme durumunu başlatıyoruz
     const token = sessionStorage.getItem("token");
     // Backend'e POST isteği yapıyoruz
-    fetch("http://localhost:3000/api/createpackage", {
+    fetch("https://iview.onrender.com/api/createpackage", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
