@@ -1,0 +1,1157 @@
+/*
+COLORS PALETTE:
+Koyu Yeşil : #3d8d88
+Sarı : #f8ca55
+Gri : #c0c9c0
+Açık Yeşil - Turkuaz : #acddda
+*/
+
+body{
+    margin: 0;
+    font-family: Montserrat;
+  }
+  textarea{
+    font-family: Montserrat;
+  }
+  p{
+    font-family: Montserrat;
+  }
+  h1{
+    font-family: Montserrat;
+  }
+  h2{
+    font-family: Montserrat;
+  }
+  h3{
+    font-family: Montserrat;
+  }
+  h4{
+    font-family: Montserrat;
+  }
+  h5{
+    font-family: Montserrat;
+  }
+  h6{
+    font-family: Montserrat;
+  }
+  .header{
+    display: block;
+    position: absolute;
+    place-items: center;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 10%;
+    background-image: url(/src/assets/drrawer.png);
+    background-size: cover;
+    background-position: center;
+    color: white;
+  }
+  
+  .adminpage{
+    margin-top: 7%;
+    margin-left: 10%;
+  }
+  .iviewlogo{
+    margin-top: 0.50%;
+    margin-left: 45%;
+    height: 50px;
+  }
+  
+  .loginBody {
+    background-color: #5ea39f;/* Sayfa arka plan rengi */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .loginPage {
+    margin: 5% auto;
+    width: 32%;
+    height: 47vh; 
+    padding-top: 7%;
+    padding-left: 5%;
+    padding-bottom: 8%;
+    border-radius: 2cap; /* Daha yuvarlak kenarlar için */
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.7);
+   /* Daha belirgin gölge için güncellendi */
+    background-color: white;
+  }
+  
+  .loginPage button{
+    background-color:#30847f;
+    color: white;
+    margin-left: 25%;
+    margin-top: 35px;
+    margin-bottom: 5%;
+    width: 30%;
+    height: 15%;
+    border: none;
+    font-size: large;
+  }
+  
+  .loginPage button:hover{
+    background-color: #acddda;
+    color: black;
+  }
+
+  .back-button{
+    background-color: white;
+    border: none;
+    font-size: large;
+    text-transform: uppercase;
+    margin-left: 3%;
+    margin-bottom: 5%;
+  }
+  
+  .back-button:hover{
+    color: silver;
+  }
+  .login-title {
+    /*text-align: left; Metni ortalar */
+    color:#38817c; /* Rengi Sarı olarak ayarlar (Örneğin Sarı: #f8ca55) */
+    font-size: 40px; /* Yazı boyutunu ayarlamak için */
+    margin-bottom: 20px; /* Alt boşluk ekleyerek düzenleme */
+    margin-top: -50px; /* Başlığı yukarı taşımak için negatif değer kullanın */
+    margin-left: 125px;
+    font-family: 'Baloo 2', cursive;
+  }
+  .loginlabel{
+    color:#38817c;
+    font-size: 18px;
+    text-align: left;
+    margin-left: 10%;
+    font-family: 'Baloo 2', cursive;
+    margin-bottom: 5px; /* Eklenen kısım */
+  }
+  
+  
+  .textField{
+    margin-bottom: 5%;
+    place-items: left;
+    width: 80%;
+    min-height: 30px;
+    border: solid 2px #38817c;
+    box-shadow: 1px 1px silver;
+    border-radius: 2cap;
+  }
+  .button{
+    background-color:#c0c9c0;
+    color : #acddda;
+    margin: 5%;
+    border-radius: 1rcap;
+    margin-bottom:5%;
+  }
+  
+  @media (max-width : 768px){
+    .loginPage{
+      margin: 0px;
+      place-items: center;
+      width: 250px;
+      padding-top: 2%;
+      padding-bottom: 2%;
+      border: solid 1px black; 
+      border-radius: 1rcap;
+    }
+    .textField{
+      margin: 2%;
+      place-items: center;
+      width: 70%;
+      height: 10%;
+    }
+  }
+  .size-3{
+    width: 50px;
+    height: 50px;
+  }
+  
+  .add-button {
+    position: absolute;
+    top: 50%; /* Butonu header'ın ortasına hizalar */
+    right: 111px; /* logout-link'in hemen yanında olacak şekilde hizalayın */
+    transform: translateY(-50%);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin-top: -261px;
+    background-color: transparent; /* Normal durumda şeffaf arka plan */
+    transition: background-color 0.2s ease, color 0.2s ease; /* Geçiş efekti ekler */
+  }
+  
+  .add-button:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Hover durumunda hafif beyaz tonlu arka plan */
+    color: #ffffff; /* Hover durumunda beyaz renk */
+  }
+  
+  .add-button:active {
+    background-color: rgba(0, 0, 0, 0.2); /* Tıklama durumunda daha koyu bir arka plan */
+    color: #ddd; /* Tıklama durumunda daha açık bir renk */
+    outline: none;
+  }
+  
+  .add-button svg {
+    width: 36px;
+    height: 36px;
+    stroke-width: 3;
+  }
+
+  .add-button:hover{
+    color: white;
+    border-radius: 5cap;
+  }
+
+  .logout-link {
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.3s;
+  }
+  .logout-icon {
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    margin-left: 1170px;
+    margin-top: -54px;
+    stroke-width: 3;
+  }
+  
+  .logout-link:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    border-radius: 4px;
+  }
+  .adminDrawer{
+    height:100vh;
+    place-items: center;
+    background-image: url(/src/assets/drrawer.png);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    opacity: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    margin-left: 0px;
+    margin-top: 0px;
+    width: 20% ;
+  }
+  
+  .buttonsList{
+    margin: 5%;
+    padding: 5%;
+  }
+  
+  .listButton{
+    font-family: Montserrat;
+    font-size: 30px;
+    place-items: center;
+    font-size: medium;
+    margin-left: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    min-height: 70px;
+    width: 90%;
+    background-color: #acddda;
+    border: 0px;
+    text-align: center;
+    text-transform: capitalize;
+    border-radius: 3rcap;
+  }
+  .listButton:hover{
+    background-color: #f8ca55;
+    color: #3d8d88;
+    border-radius: 3rcap;
+  }
+  
+  .questionpack{
+    margin-left: 2%;
+    margin-top: -2%;
+    padding-left: 3% ;
+    width: 25x;
+    height: 25px;
+    display: block;
+    position: absolute;
+  }
+  
+  .intlist{
+    margin-left: 2%;
+    margin-top: -1%;
+    padding-left: 3%;
+    width: 25px;
+    height: 25px;
+    display: block;
+    position: absolute;
+  }
+  
+  .admindrawerlogout{
+    font-family: Montserrat;
+    width: 90%;
+    margin-left: 5%;
+    min-height: 50px;
+    margin-top: 10%;
+    background-color: #acddda;
+    border: 0px;
+    font-size: larger;
+    border-radius: 3rcap;
+  }
+  .admindrawerlogout:hover{
+    background-color: #f8ca55;
+    border-radius: 3cap;
+  }
+  
+  .adminDrawerOpen{
+    margin-top: 10%;
+    margin-left: 22%;
+  }
+  .adminpanelbutton{
+    width: 100%;
+    text-align: center;
+    background-color: #acddda;
+    border: 0;
+  }
+  .adminpanelbutton:hover{
+    background-color: #f8ca55;
+    border-radius: 1cap;
+  }
+  
+  
+  .size-1{
+    width: 15px;
+    height: 15px;
+  }
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Dinamik kolonlar */
+    gap: 20px; /* Kartlar arasındaki boşluk */
+    padding: 20px;
+    max-width: 1200px; /* Maksimum genişlik, ihtiyacınıza göre ayarlayın */
+    margin: 0 auto;
+    padding-left: 0px;
+    padding-right: 110px; /* Sağ ve soldan küçük boşluk */
+    box-sizing: border-box;    
+  }
+  .gridVideoCollection-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Dinamik kolonlar */
+    gap: 40px; /* Kartlar arasındaki boşluk */
+    padding: 20px;
+    max-width: 1200px; /* Maksimum genişlik, ihtiyacınıza göre ayarlayın */
+    margin: 0 auto;
+    padding-left: 0px;
+    padding-right: 110px; /* Sağ ve soldan küçük boşluk */
+    box-sizing: border-box;   
+  }
+  .card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    border: 2px solid transparent; /* Varsayılan olarak şeffaf */
+    
+ 
+  }
+  
+  .card.active {
+    border-color: #30847f; /* Aktif kartlar için mavi kenar */
+   
+  }
+  
+  .card.inactive {
+    border-color: #30847f; /* İnaktif kartlar için sarı kenar */
+   
+  }
+  
+ 
+  .card-delete-button{
+    font-family: Montserrat;
+    border: 0;
+    width: 30px;
+    height: 30px;
+    background-color: white;
+  }
+  .card-delete-button:hover{
+    background-color: red;
+    border-radius: 1cap;
+  }
+  
+  .card-link-button{
+    font-family: Montserrat;
+    border: 0;
+    width: 100px;
+    height: 40px;
+    background-color: white;
+  }
+  .card-link-button:hover{
+    background-color: silver;
+    border-radius: 1cap;
+  }
+  
+  .card-info-button{
+    font-family: Montserrat;
+    border: 0;
+    width: 80px;
+    height: 40px;
+    background-color: white;
+    margin-left: -10px;
+  }
+  .card-info-button:hover{
+    background-color: silver;
+    border-radius: 1cap;
+  }
+  .block.active-block {
+    padding-left: 5%;
+    text-align: left;
+    margin-left: 10%;
+    width: 80%;
+    height: 30%;
+    background-color: #30847f;
+    border-radius: 1cap;
+    border: solid #30847f 1px;
+    box-shadow: 1px 1px silver;
+  }
+  
+  .block.inactive-block {
+    padding-left: 5%;
+    text-align: left;
+    margin-left: 10%;
+    width: 80%;
+    height: 30%;
+    background-color: #30847f;
+    border-radius: 1cap;
+    border: solid #30847f 1px;
+    box-shadow: 1px 1px silver;
+  }
+  
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .card-title {
+    font-size: 1.3rem;
+    margin-top: 10px;
+  }
+  
+  .card-description {
+    color: #666;
+    font-size: 1rem;
+    margin-top: 10px;
+  }
+  
+  .card-button {
+    font-family: Montserrat;
+    min-width: 30%;
+    height: 10%;
+    background-color: white;
+    border: none;
+    cursor: pointer;
+  }
+  .card-button2 {
+    font-family: Montserrat;
+    margin-right: 10%;
+    width: 35%;
+    height: 10%;
+    background-color: white;
+    border: none;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+  
+  .card-button:hover {
+    border-radius: 1cap;
+    background-color: silver;
+  }
+  
+  .modal {
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+  }
+  
+  .modal-content {
+    background-color: #fff;
+    margin: 15% auto; 
+    margin-top: 1%;
+    padding: 20px;
+    padding-top: 1px;
+    padding: 10px 15px;
+    width: 90%;
+    max-width: 500px; 
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border: solid 3px #38817c;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .table-container {
+    width: 90%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+  }
+  
+  .table-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .question-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .question-table th,
+  .question-table td {
+    padding: 15px;
+    text-align: left;
+  }
+  
+  .question-table th {
+    background-color: white;
+    font-weight: bold;
+  }
+  
+  .question-table td {
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .question-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .question-table td {
+    border-radius: 8px;
+  }
+  
+  .question-table td:last-child {
+    text-align: right;
+  }
+  
+  .create-text-field{
+    border: solid 1px silver;
+    border-radius: 1cap;
+    width: 100%;
+    height: 30px;
+  }
+  
+  .toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #3d8d88;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+  
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .modal-button{
+    margin-top: 5%;
+    margin-left: 70%;
+    width: 150px;
+    height: 30px;
+    background-color: white;
+    border: none;
+  }
+  
+  .modal-button:hover{
+    background-color: silver;
+    border-radius: 2cap;
+  }
+  
+  .modal-submit-button{
+    margin-top: -3%;
+    margin-left: 70%;
+    width: 150px;
+    height: 50px;
+    background-color: white;
+    border: solid 1px #38817c;
+    border-radius: 2cap;
+  }
+  .modal-submit-button:hover{
+    background-color: #38817c;
+    border-radius: 2cap;
+  }
+  
+  .minute-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .minute-input label {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  
+  .minute-input input {
+    padding: 10px;
+    font-size: 16px;
+    width: 100px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .question-area{
+    width: 95%;
+    height: 100px;
+    border-radius: 1cap;
+  }
+  
+  .video-interview-container {
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    max-height: 90vh; /* Ekranın %90'ını kaplasın */
+    overflow: auto; /* Taşan içerik için kaydırılabilir alan oluşturur */
+
+  }
+  
+  .video-section {
+    flex: 2;
+    margin-right: 20px;
+    margin-bottom: -20px;
+  }
+  
+  .video-section h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .video-player {
+    min-width: 100%;
+    height: 430px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  
+  .details-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top: 0px; 
+    margin-bottom: -10px;
+    margin-left: -290px;
+  }
+  
+  .details-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .notes-section {
+    margin-bottom: 0px;
+  }
+  
+  textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  .status-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #3d8d88;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(20px);
+  }
+  
+  .save-button {
+    background-color: #3d8d88;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .save-button:hover {
+    background-color: silver;
+  }
+  
+  .package-table-container {
+    width: 90%;
+    margin: 20px auto;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .package-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .package-table th,
+  .package-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .package-table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+  }
+  
+  .package-table td {
+    background-color: #fff;
+  }
+  
+  .edit-button,
+  .delete-button {
+    font-family: Montserrat;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-right: 10px;
+  }
+  
+  .edit-button:hover {
+    color: #3d8d88;
+  }
+  
+  .delete-button:hover {
+    color: red;
+  }
+  
+  .add-button2 {
+    display: block;
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
+  .add-button2:hover{
+    background-color: silver;
+    border-radius: 2cap;
+  }
+  
+  .question-table-container {
+    width: 90%;
+    margin: -40px auto;
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .package-title-input {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .question-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .question-table th,
+  .question-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .question-table th {
+    background-color: #f1f1f1;
+  }
+  
+  .drag-handle {
+    cursor: grab;
+    font-size: 18px;
+  }
+  
+  .delete-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  .delete-button:hover {
+    color: red;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .cancel-button {
+    background-color: #ccc;
+  }
+  
+  
+  .question-packagename-text{
+    height: 30px;
+    width: 95%;
+    border: solid 1px silver;
+    border-radius: 1cap;
+  }
+  
+  .submit-button{
+    background-color: white;
+    border: none;
+    font-size: large;
+    height: 40px;
+    width: 20%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    margin-left: 75%;
+  }
+  
+  .submit-button:hover{
+    background-color: silver;
+    border-radius: 1cap;
+  }
+  
+  
+  .h5container{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+  }
+  
+  .interview-text-input{
+    margin-left: 10%;
+    font-size: 20px;
+    color: #30847f;
+    margin-bottom: 10px;
+    
+  }
+  .interview-text-field{
+    margin: -10px 5% -2% 5%;
+    width: 90%;
+    height: 30px;
+    border-radius: 1cap;
+    border: solid 1px #38817c;
+  }
+  
+  .interview-page{
+    margin-top:2%;
+    
+  }
+  
+  .interview-question-numb{
+    display: block;
+    position: relative;
+    margin-left: 5%;
+    margin-top: 5%;
+  }
+  
+  .interview-text-area{
+    height: 10vh;
+    width: 90%;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    color: black;
+    text-align: center;
+  }
+  .interview-video{
+    width: 50%;
+    margin-left: 25%;
+    margin-bottom: 5%;
+  }
+  .chekbox-container{
+    margin-top: 5%;
+  }
+  .interview-button{
+    margin-left: 37%;
+    margin-bottom: 2%;
+    width: 25%;
+    height: 5vh;
+    background-color: #3d8d88;
+    border: none;
+    border-radius: 2cap;
+  }
+  .interview-button:hover{
+    background-color: #acddda;
+    color: #f8ca55;
+  }
+  
+  @media (max-width: 768px){
+    .iviewlogo{
+      margin-top: 5%;
+      margin-left: 35%;
+    }
+    .h5container{
+      position: inherit;
+      display: flex;
+      justify-content: center;
+      margin: 5%;
+    }
+    .interview-page{
+      margin-top: 45%;
+    }
+    
+    .interview-question-numb{
+      display: block;
+      position: relative;
+      margin-top: 15%;
+    }
+    
+    .interview-text-area{
+      height: 10vh;
+      width: 85%;
+      margin-left: 5%;
+      margin-bottom: 5%;
+      color: black;
+      text-align: center;
+    }
+    .form-container{
+      margin-bottom: 10%;
+    }
+    
+    .interview-video{
+      width: 90%;
+      height: 25vh;
+      margin-left: 5%;
+      margin-bottom: 5%;
+    }
+    .modal{
+      width: 100%;
+    }
+    .modal-content{
+      width: 80%;
+    }
+    .chekbox-container{
+      margin-bottom: 2%;
+    }
+    .modal-submit-button{
+      width: 35%;
+      margin: 0% 5%;
+    }
+  }
+  
+  .videocard{
+    border: solid 1px black;
+    background-color: black;
+    border-radius: 5px;
+  }
+  
+  .videoButton{
+    background-color: white;
+    border : 0 ; 
+  }
+  .candiInfo{
+    background-color: #f9f9f9;
+    width: 80%;
+    height: 5vh;
+    margin-bottom: 5px;
+    border: 0;
+  }
+  
+  .changePack{
+    width: 30%;
+    height: 5vh;
+    background-color: 0;
+    border-radius: 1cap;
+  }
+  
+  .questionCard{
+    width: 68%;
+    min-height: 22vh;
+    margin: 2%;
+    border: 5px solid #3d8d88;
+    border-radius: 5rcap;
+    padding: 2%;
+    margin-left: 240px;
+  }
+
+  .candidateQuestionCard{
+    width: 68%;
+    min-height: 22vh;
+    margin: 2%;
+    padding: 2%;
+    margin-left: 300px;
+    margin-top: -360px;
+  }
+
+  .cardinfo{
+    display: flex;
+  }
+  .newh6{
+    margin-left: 20%;
+  }
+  @media (max-width: 768px){
+    .questionCard{
+      width: 80%;
+      margin-top: 35%;
+      padding: 2%;
+    }
+    .interview-button{
+      margin-left: 25%;
+      margin-bottom: 2%;
+      width: 50%;
+      height: 5vh;
+      background-color: #3d8d88;
+      border: none;
+      border-radius: 2cap;
+      
+    }
+  }
+  
+  .log_out_button{
+    margin-left: 25%;
+    background-color: transparent;
+    border: 0;
+  }
+  
+  .log_out_button:hover{
+    color: white;
+  }
+
+  .saved-popup {
+    position: fixed;
+    top: 120px;
+    right: 150px;
+    background-color: green;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
