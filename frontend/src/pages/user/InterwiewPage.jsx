@@ -2,13 +2,11 @@ import * as React from "react";
 import "../../App.css";
 import PersonalInfoForm from "../../components/PersonalInfoForm";
 import { useNavigate, useParams } from "react-router-dom";
-import useAPI from "../../store/storeAPI";
 import QuestionCardList from "../../components/QuestionCardList";
 import VideoRecorder from "../../components/VideoRecorder";
 
 export default function InterviewPage() {
   const nav = useNavigate();
-  const { fetchData, setData } = useAPI();
   const [isStart, setIsStart] = React.useState(false);
   const [candidate, setCandidate] = React.useState("");
   const [candiOK, setCandiOK] = React.useState(false);
@@ -23,17 +21,14 @@ export default function InterviewPage() {
     setCandidate(e);
   };
 
-  // const handleStart = () => {
-  //   setIsStart(true);
-  // };
-
   const handleStart = async () => {
-    await fetchQuestions();
     setIsStart(true);
+    await fetchQuestions();
     if (videoRef.current) {
       videoRef.current.startRecording(); // Video kaydını başlat
     }
   };
+
   const handleFinish = () => {
     if (videoRef.current) {
       videoRef.current.stopRecordingAndUpload(); // Video kaydını durdur ve yüklemeyi başlat
@@ -45,51 +40,75 @@ export default function InterviewPage() {
   };
 
   React.useEffect(() => {
-    if (
-      candidate &&
-      candidate !== null &&
-      candidate !== undefined &&
-      candidate !== "undefined"
-    ) {
+    if (candidate) {
       setCandiOK(true);
-    } else if (
-      candidate === null ||
-      candidate === undefined ||
-      candidate === "undefined"
-    ) {
+    } else {
       setCandiOK(false);
     }
   }, [candidate]);
 
+  React.useEffect(() => {
+    const fetchInterview = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_LINK}getinterviewbyid/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Interview data could not be fetched");
+        }
+  
+        const data = await response.json();
+        setInter(data);
+        console.log("Fetched interview data:", data);
+      } catch (err) {
+        console.error("Interview data could not be loaded", err.message);
+        // Yönlendirmeyi kaldırarak sadece hatayı konsola yazdırın.
+        // nav("/");
+      }
+    };
+  
+    if (id !== undefined && id !== "undefined") {
+      fetchInterview();
+    }
+  }, [id, nav]);
+  
+
   const fetchQuestions = async () => {
     try {
-      const interData = await fetchData(`getinterviewbyid/${id}`, "GET");
-      setInter(interData);
-      console.log("Fetched questions data:", interData);
-      if (interData?.question?.length > 0) {
-        var newList = [];
-        for (let i of interData.question) {
-          const questData = await fetchData(`getquestionbyid/${i}`, "GET");
-          newList.push(questData);
+      if (inter?.question?.length > 0) {
+        let newList = [];
+        for (let i of inter.question) {
+          const questResponse = await fetch(`${import.meta.env.VITE_API_LINK}getquestionbyid/${i}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!questResponse.ok) {
+            throw new Error("Question data could not be fetched");
+          }
+
+          const questionData = await questResponse.json();
+          newList.push(questionData);
         }
         setAllQuestions(newList);
+      } else {
+        console.error("Interview data does not contain questions.");
       }
     } catch (err) {
-      console.error("Sorular çekilirken hata oluştu", err.message);
+      console.error("Error occurred while fetching questions", err.message);
     }
   };
-  React.useEffect(() => {
-    if (id === undefined || id === "undefined") {
-    }
-    fetchQuestions();
-    if (!allQuestions || allQuestions.length <= 0) {
-      console.error("hata");
-    }
-  }, [id]);
 
   const handleModelClose = () => {
     setModalPen(false);
   };
+
   return (
     <div className="interview-page">    
       <PersonalInfoForm
@@ -114,15 +133,15 @@ export default function InterviewPage() {
             <div style={{ marginLeft: "25%" }}>
               <div
                 style={{
-                  marginTop: "420px", // Butonu aşağı almak için ekledim
-                  textAlign: "center", // Ortalamak için
+                  marginTop: "420px",
+                  textAlign: "center",
                 }}
               >
                 <button
                   onClick={!isStart ? handleStart : handleFinish}
                   className="interview-button"
                   style={{
-                    marginLeft: !isStart ? "35%" : "60%", // Başla biraz solda, Kaydı Bitir ve Gönder sağda
+                    marginLeft: !isStart ? "35%" : "60%",
                     marginBottom: "2%",
                     width: "25%",
                     height: "5vh",

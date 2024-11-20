@@ -10,24 +10,34 @@ export default function QuestionList({ isModalOpen, onClose }) {
   const nav = useNavigate();
 
   const goEdit = (e) => {
-    const newid=e.target.value
+    const newid = e.target.value;
     nav(`/packagequestions/${newid}`);
+  };
+
+  // Çerezlerden token'ı alır
+  const getCookie = (name) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(";").shift();
+    return null;
   };
 
   React.useEffect(() => {
     const fetchQuestion = async () => {
       setError(null);
       setLoading(true);
-      const token = sessionStorage.getItem("token");
+      const token = getCookie("token"); // Çerezden token alıyoruz
+
       try {
         const response = await fetch("https://iview.onrender.com/api/getquestion", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
           },
+          credentials: "include", // Token'ı çerezlerden gönderiyoruz
         });
-        if (!response.ok) throw new Error("Questions did not catch");
+
+        if (!response.ok) throw new Error("Questions did not fetch");
         const data = await response.json();
         setQuestions(data);
       } catch (error) {
@@ -72,11 +82,9 @@ export default function QuestionList({ isModalOpen, onClose }) {
                 <tbody>
                   {questions.map((item) => (
                     <tr key={item._id}>
-                      {" "}
                       {/* Backend'den gelen ObjectId'yi kullan */}
                       <td>{item.question}</td>
-                      <td>{item.timer} min</td>{" "}
-                      {/* Timer alanını backend'e göre düzenle */}
+                      <td>{item.timer} min</td> {/* Timer alanını backend'e göre düzenle */}
                       <button
                         value={item._id}
                         onClick={goEdit}

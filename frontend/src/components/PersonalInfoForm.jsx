@@ -22,22 +22,34 @@ export default function PersonalInfoForm({
 
   const getAllCandidates = async () => {
     try {
-      const interData = await fetchData(`getinterviewbyid/${interid}`, "GET");
-      if(interData){
-        setInterview(interData)
+      const response = await fetch(`${import.meta.env.VITE_API_LINK}getinterviewbyid/${interid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error("Mülakat verisi getirilemedi");
       }
+  
+      const interData = await response.json();
+      setInterview(interData);
+  
       if (interData?.candidates !== null && interData?.candidates?.length > 0) {
         var candis = [];
         for (let i of interData.candidates) {
-          const candiData = await fetchData(`getcandidatebyid/${i}`, "GET");
-          candis.push(candiData);
+          const candiData = await fetch(`${import.meta.env.VITE_API_LINK}getcandidatebyid/${i}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          candis.push(await candiData.json());
         }
-        var candismails = [];
-        var candisphones = [];
-        for (let j of candis) {
-          candismails.push(j.email);
-          candisphones.push(j.phone_number);
-        }
+  
+        const candismails = candis.map((j) => j.email);
+        const candisphones = candis.map((j) => j.phone_number);
         setCandidatesEmails(candismails);
         setCandidatesPhones(candisphones);
       }
@@ -45,6 +57,7 @@ export default function PersonalInfoForm({
       console.error("Hatalı işlem", err.message);
     }
   };
+  
 
   const handleName = (e) => {
     setName(e.target.value);
