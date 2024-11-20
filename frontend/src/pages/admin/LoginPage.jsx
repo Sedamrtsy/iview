@@ -27,7 +27,7 @@ export default function LoginPage() {
 
       // Giriş başarılı, token'ı sakla ve kullanıcıyı yönlendir
       const data = await response.json();
-      console.log(data.token)
+      console.log("giriş başarılı")
       sessionStorage.setItem("token", data.token);
       nav("/adminhomepage");
     } catch (error) {
