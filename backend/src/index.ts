@@ -31,12 +31,13 @@ app.use(cors({
 }));
 
 // Preflight request'ler (OPTIONS) için CORS yanıtı
-app.options('*', cors({
-  origin: frontendURL,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
-}));
+// app.options('*', cors({
+//   origin: frontendURL,
+//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   credentials: true,
+// }));
+app.options('*', cors());
 
 // Middleware'ler
 app.use(cookieParser()); // Cookie işlemleri için
