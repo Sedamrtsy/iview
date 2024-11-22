@@ -15,6 +15,7 @@ const useAPI = create((set) => ({
     };
 
     try {
+      console.log("girdi")
       const response = await fetch(fullAPI, {
         method: order,
         headers,
