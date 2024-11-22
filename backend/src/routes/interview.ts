@@ -7,7 +7,7 @@ import {
   getinterviewByID,
   patchInterview,
 } from "../controllers/interview";
-import { jwtAuthMiddleware } from "../middleware/verifyToken"; // JWT doğrulama middleware
+import jwtAuthMiddleware from "../middleware/verifyToken"; // JWT doğrulama middleware
 
 const router = express.Router();
 

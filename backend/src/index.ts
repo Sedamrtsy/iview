@@ -10,7 +10,8 @@ import interview from './routes/interview';
 import candidates from './routes/candidates';
 import videoRoutes from './routes/video';
 import logoutRoute from './routes/logout';
-import { verifyToken } from './middleware/verifyToken';
+import verifyToken from './middleware/verifyToken';
+
 
 dotenv.config();
 
