@@ -33,6 +33,7 @@ const useAPI = create((set) => ({
         headers,
         credentials: "include",
       });
+      console.log("getresponse:", response);
   
       if (!response.ok) {
         let errorMsg = "Data could not be fetched";
@@ -46,6 +47,7 @@ const useAPI = create((set) => ({
       }
   
       const data = await response.json();
+      console.log("getdata:", data);
       set({ loading: false });
       return data;
     } catch (error) {
