@@ -50,7 +50,7 @@ export default function AdminHomePage() {
       alert("Bu mülakatın linki paylaşılamaz");
       return;
     }
-    const sendLink = `http://localhost:5173/interviewpage/${link}`;
+    const sendLink = `https://iview.onrender.com/interviewpage/${link}`;
     setLink(sendLink);
     setLinkOpen(true);
   };
