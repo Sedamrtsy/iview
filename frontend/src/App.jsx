@@ -16,8 +16,10 @@ function App() {
   const navigate = useNavigate();
   const [token, setToken] = React.useState(null);
 
+
   React.useEffect(() => {
     const storedToken = sessionStorage.getItem("token");
+    console.log("Stored Token:", storedToken);
     if (!storedToken && !location.pathname.startsWith("/interviewpage")) {
       navigate("/");
     } else {
