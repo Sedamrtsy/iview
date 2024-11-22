@@ -13,7 +13,7 @@ const useAPI = create((set) => ({
     const headers = {
       "Content-Type": "application/json",
     };
-
+    console.log("headers: ", headers)
     try {
       console.log("girdi")
       const response = await fetch(fullAPI, {
