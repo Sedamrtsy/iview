@@ -16,14 +16,16 @@ const useAPI = create((set) => ({
     console.log("headers: ", headers)
     try {
       console.log("girdi")
+      console.log("İstek yapılıyor:", fullAPI);
       const response = await fetch(fullAPI, {
         method: order,
         headers,
         credentials: "include", // Cookie gönderimi için gerekli
+        
       });
       console.log("method",method);
       console.log("headers:", headers);
-      console.log("getresponse:", response);
+      console.log("İstek yanıtı:", response);
 
       if (!response.ok) {
         let errorMsg = "Data could not be fetched";
@@ -37,7 +39,7 @@ const useAPI = create((set) => ({
       }
 
       const data = await response.json();
-      console.log("getdata:", data);
+      console.log("İstek sonucu:", data);
       set({ loading: false });
       return data;
     } catch (error) {

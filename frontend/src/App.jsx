@@ -17,9 +17,16 @@ function App() {
 
   React.useEffect(() => {
     // Token'ı sessionStorage'dan almak yerine login sayfasında olup olmadığını kontrol ediyoruz.
-    const storedToken = sessionStorage.getItem("token");
-    console.log("Stored Token:", storedToken);
-    if (!storedToken && !location.pathname.startsWith("/interviewpage")) {
+  //   const storedToken = sessionStorage.getItem("token");
+  //   console.log("Stored Token:", storedToken);
+  //   if (!storedToken && !location.pathname.startsWith("/interviewpage")) {
+  //     navigate("/");
+  //   }
+  // }, [location.pathname, navigate]);
+
+    // Kullanıcının oturum açıp açmadığını kontrol et
+    // Eğer login değilse ve "/interviewpage" dışında bir sayfa açmak isterse, login sayfasına yönlendir
+    if (!document.cookie.includes("token") && !location.pathname.startsWith("/interviewpage")) {
       navigate("/");
     }
   }, [location.pathname, navigate]);
