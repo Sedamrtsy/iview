@@ -77,6 +77,7 @@ export default function AdminHomePage() {
       const order = "GET";
       const data = await fetchData(link, order);
       setPackages(data);
+      console.log("adminHomePage:",data);
     };
     fetchPackages();
     if (packages === null) {
