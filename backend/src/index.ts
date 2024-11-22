@@ -38,7 +38,7 @@ app.use(cors({
 //   credentials: true,
 // }));
 
-// app.options('*', cors());
+app.options('*', cors());
 
 // Middleware'ler
 app.use(cookieParser()); // Cookie işlemleri için
