@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import jwt from 'jsonwebtoken';
 import * as authService from "../services/auth";
 
 export const login = async (req: Request, res: Response): Promise<void> => {
@@ -7,14 +8,25 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     // Kullanıcıyı doğrula
     const isAuthenticated = await authService.authenticateUser(email, password);
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("email:", email);
+    console.log("password:", password);
     if (!isAuthenticated) {
       res.status(401).json({ msg: "Invalid credentials" });
       return;
     }
 
     // Token oluştur
-    const token = authService.generateToken(email);
-
+    // const token = authService.generateToken(email);
+        
+    // Token oluştur
+    const secretKey = process.env.JWT_SECRET;
+    if (!secretKey) {
+      res.status(500).json({ message: 'Secret key eksik' });
+      return;
+    }
+    const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
+    
     // Token'ı cookie olarak set et
     res.cookie("token", token, {
       httpOnly: true, // JavaScript ile erişim engellenir
