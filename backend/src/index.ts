@@ -24,14 +24,21 @@ connectDB();
 
 // CORS Middleware'i
 app.use(cors({
-  origin: frontendURL, // Frontend URL'si
+  origin: frontendURL, // İzin verilen frontend URL'si
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // İzin verilen HTTP metotları
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Cookie veya token göndermek için gerekli
 }));
 
-app.options('*', cors()); // Preflight request'ler için CORS ayarını genişletin
+// Preflight request'ler (OPTIONS) için CORS yanıtı
+app.options('*', cors({
+  origin: frontendURL,
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+}));
 
+// Middleware'ler
 app.use(cookieParser()); // Cookie işlemleri için
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Form verileri için
