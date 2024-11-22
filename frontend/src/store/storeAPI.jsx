@@ -9,6 +9,7 @@ const useAPI = create((set) => ({
   fetchData: async (link, order = "GET") => {
     set({ loading: true });
     const fullAPI = `${API}${link}`;
+    console.log("fullAPI:", fullAPI);
     const headers = {
       "Content-Type": "application/json",
     };
@@ -19,6 +20,8 @@ const useAPI = create((set) => ({
         headers,
         credentials: "include", // Cookie gönderimi için gerekli
       });
+      console.log("method",method);
+      console.log("headers:", headers);
       console.log("getresponse:", response);
 
       if (!response.ok) {
