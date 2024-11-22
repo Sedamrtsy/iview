@@ -1,51 +1,46 @@
 import { Request, Response } from "express";
-import jwt from 'jsonwebtoken';
-import * as authService from "../services/auth";
+import AuthService from "../services/auth"; // Default olarak AuthService import ediliyor
+import jwt from "jsonwebtoken";
 
-export const login = async (req: Request, res: Response): Promise<void> => {
-  const { email, password } = req.body;
+export class AuthController {
+  public static async login(req: Request, res: Response): Promise<void> {
+    try {
+      const { email, password } = req.body;
+      const authenticated = await AuthService.authenticate(email, password);
 
-  try {
-    // Kullanıcıyı doğrula
-    const isAuthenticated = await authService.authenticateUser(email, password);
-    console.log("isAuthenticated:", isAuthenticated);
-    console.log("email:", email);
-    console.log("password:", password);
-    if (!isAuthenticated) {
-      res.status(401).json({ msg: "Invalid credentials" });
-      return;
-    }
+      if (!authenticated) {
+        res.status(401).json({ message: "Login failed" });
+        return;
+      }
 
-    // Token oluştur
-    // const token = authService.generateToken(email);
-        
-    // Token oluştur
-    const secretKey = process.env.JWT_SECRET;
-    if (!secretKey) {
-      res.status(500).json({ message: 'Secret key eksik' });
-      return;
-    }
-    const token = jwt.sign({ email }, secretKey, { expiresIn: '1h' });
-    
-    // Token'ı cookie olarak set et
-    res.cookie("token", token, {
-      httpOnly: true, // JavaScript ile erişim engellenir
-      secure: process.env.NODE_ENV === "production", // HTTPS gerektirir (production için)
-      sameSite: "strict", // CSRF koruması için sıkı mod
-      maxAge: 60 * 60 * 1000, // 1 saat geçerlilik süresi
-    });
+      // Kullanıcı doğrulandıktan sonra JWT token oluştur
+      const accessToken = AuthService.generateToken(email); // `AuthService.generateToken` kullanıyoruz.
 
-    res.status(200).json({
-      msg: "Login successful",
-      user: { email },
-      token, // Yanıta token'i de ekle
-    });
-  } catch (error) {
-    console.error("Login işlemi sırasında bir hata oluştu:", error);
-    if (error instanceof Error) {
-      res.status(500).json({ msg: "Server error", error: error.message });
-    } else {
-      res.status(500).json({ msg: "Bilinmeyen bir hata oluştu" });
+      const refreshToken = jwt.sign(
+        { email },
+        process.env.JWT_REFRESH_SECRET_KEY || "defaultRefreshSecretKey",
+        { expiresIn: "1d" }
+      );
+
+      // Refresh token ve access token çerezlerde saklanıyor
+      res.cookie("jwt", refreshToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000, // 1 gün geçerlilik süresi
+      });
+
+      res.cookie("jwtToken", accessToken, {
+        httpOnly: true,
+        sameSite: "strict",
+        maxAge: 30 * 1000, // 30 saniye geçerlilik süresi
+      });
+
+      res.status(200).json({ message: "Logged in" });
+    } catch (error) {
+      console.error("Error during login:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   }
-};
+
+  // HandleRefreshToken ve logout metodları da aynen devam edebilir...
+}

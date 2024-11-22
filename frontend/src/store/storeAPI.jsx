@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const API = import.meta.env.VITE_API_LINK; // Vite'deki ortam değişkeni
+const API = import.meta.env.VITE_API_LINK;
 
 const useAPI = create((set) => ({
   error: null,
@@ -9,23 +9,12 @@ const useAPI = create((set) => ({
   fetchData: async (link, order = "GET") => {
     set({ loading: true });
     const fullAPI = `${API}${link}`;
-    console.log("fullAPI:", fullAPI);
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    console.log("headers: ", headers)
+
     try {
-      console.log("girdi")
-      console.log("İstek yapılıyor:", fullAPI);
       const response = await fetch(fullAPI, {
         method: order,
-        headers,
-        credentials: "include", // Cookie gönderimi için gerekli
-        
+        credentials: "include", // Çerez gönderimi için gerekli
       });
-      console.log("method",method);
-      console.log("headers:", headers);
-      console.log("İstek yanıtı:", response);
 
       if (!response.ok) {
         let errorMsg = "Data could not be fetched";
@@ -39,7 +28,7 @@ const useAPI = create((set) => ({
       }
 
       const data = await response.json();
-      console.log("İstek sonucu:", data);
+      console.log("getdata:", data);
       set({ loading: false });
       return data;
     } catch (error) {
@@ -50,16 +39,15 @@ const useAPI = create((set) => ({
   setData: async (link, order = "POST", newBody = {}) => {
     set({ loading: true });
     const fullAPI = `${API}${link}`;
-    const headers = {
-      "Content-Type": "application/json",
-    };
 
     try {
       const response = await fetch(fullAPI, {
         method: order,
-        headers,
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(newBody),
-        credentials: "include", // Cookie gönderimi için gerekli
+        credentials: "include", // Çerez gönderimi için gerekli
       });
 
       if (!response.ok) {

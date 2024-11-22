@@ -8,9 +8,8 @@ import question from './routes/question';
 import qpackage from './routes/package';
 import interview from './routes/interview';
 import candidates from './routes/candidates';
-import videoRoutes from './routes/video';  // Video yükleme rotası
+import videoRoutes from './routes/video';
 import logoutRoute from './routes/logout';
-
 import { verifyToken } from './middleware/verifyToken';
 
 dotenv.config();
@@ -26,37 +25,29 @@ connectDB();
 app.use(cors({
   origin: frontendURL, // İzin verilen frontend URL'si
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // İzin verilen HTTP metotları
-  allowedHeaders: ["Content-Type"],
-  // allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type", "Authorization"], // Eklenen Authorization header'ı
   credentials: true, // Cookie veya token göndermek için gerekli
 }));
 
 // Preflight request'ler (OPTIONS) için CORS yanıtı
-// app.options('*', cors({
-//   origin: frontendURL,
-//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-//   allowedHeaders: ["Content-Type", "Authorization"],
-//   credentials: true,
-// }));
 app.options('*', cors());
+
 // Middleware'ler
 app.use(cookieParser()); // Cookie işlemleri için
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Form verileri için
 
 // API rotaları
-app.use('/api', authRoute);
-app.use('/api', question);
-app.use('/api', qpackage);
-app.use('/api', interview);
-app.use('/api', candidates);
-app.use('/api', videoRoutes);  // Video yükleme için eklenen yeni rota
-app.use("/api", logoutRoute);
+app.use('/api/auth', authRoute); // Kimlik doğrulama rotası
+app.use('/api/logout', logoutRoute); // Çıkış yapma rotası
 
-// Korunan bir rota örneği (token doğrulama ile erişim kontrolü)
-app.get('/api/protected', verifyToken, (req: Request, res: Response) => {
-  res.json({ message: 'Erişim başarılı', user: (req as any).user });
-});
+// Aşağıdaki rotalar için JWT doğrulama kullanın
+app.use(verifyToken);
+app.use('/api/question', question);
+app.use('/api/package', qpackage);
+app.use('/api/interview', interview);
+app.use('/api/candidates', candidates);
+app.use('/api/videos', videoRoutes);
 
 // 404 Hatası için varsayılan yanıt
 app.use((req, res) => {
