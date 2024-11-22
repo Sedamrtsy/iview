@@ -26,6 +26,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.status(200).json({
       msg: "Login successful",
       user: { email },
+      token, // Yanıta token'i de ekle
     });
   } catch (error) {
     console.error("Login işlemi sırasında bir hata oluştu:", error);
