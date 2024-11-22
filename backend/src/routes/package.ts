@@ -1,6 +1,6 @@
 import express from 'express';
 import { createPackage, getPackages, updatePackage, deletePackage,getPackageByID,patchPackage } from '../controllers/package';
-import { verifyToken } from '../middleware/verifyToken'; // JWT doğrulama middleware
+import verifyToken from '../middleware/verifyToken'; // JWT doğrulama middleware
 
 const router = express.Router();
 

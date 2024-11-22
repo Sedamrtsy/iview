@@ -1,6 +1,6 @@
 import express from 'express';
 import { createCandidate, getCandidates, updateCandidate, deleteCandidate, getCandidateByID,patchCandidate, signVideo } from '../controllers/candidates';
-import { verifyToken } from '../middleware/verifyToken'; // JWT doğrulama middleware
+import verifyToken from '../middleware/verifyToken'; // JWT doğrulama middleware
 
 const router = express.Router();
 
