@@ -17,7 +17,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
-const frontendURL = process.env.FRONTEND_URL ; // .env'den frontend URL'yi al
+const frontendURL = process.env.FRONTEND_URL || "https://iview-teal.vercel.app"; // .env'den frontend URL'yi al
 
 // MongoDB bağlantısını yap
 connectDB();
@@ -37,9 +37,7 @@ app.use(cors({
 //   allowedHeaders: ["Content-Type", "Authorization"],
 //   credentials: true,
 // }));
-
 app.options('*', cors());
-
 // Middleware'ler
 app.use(cookieParser()); // Cookie işlemleri için
 app.use(express.json());
