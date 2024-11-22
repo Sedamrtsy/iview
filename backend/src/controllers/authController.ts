@@ -6,7 +6,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
   try {
     // Kullanıcıyı doğrula
-    const isAuthenticated = authService.authenticateUser(email, password);
+    const isAuthenticated = await authService.authenticateUser(email, password);
     if (!isAuthenticated) {
       res.status(401).json({ msg: "Invalid credentials" });
       return;

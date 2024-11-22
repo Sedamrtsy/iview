@@ -26,7 +26,8 @@ connectDB();
 app.use(cors({
   origin: frontendURL, // İzin verilen frontend URL'si
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // İzin verilen HTTP metotları
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type"],
+  // allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Cookie veya token göndermek için gerekli
 }));
 

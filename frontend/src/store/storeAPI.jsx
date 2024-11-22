@@ -2,39 +2,25 @@ import { create } from "zustand";
 
 const API = import.meta.env.VITE_API_LINK; // Vite'deki ortam değişkeni
 
-// Yardımcı fonksiyon: Authorization header'ı ekleme
-const getHeaders = (includeAuth) => {
-  const headers = {
-    "Content-Type": "application/json",
-  };
-  
-  if (includeAuth) {
-    const token = sessionStorage.getItem("token");
-    if (token) {
-      headers["Authorization"] = `Bearer ${token}`;
-    }
-  }
-  
-  return headers;
-};
-
 const useAPI = create((set) => ({
   error: null,
   loading: false,
 
-  fetchData: async (link, order = "GET", includeAuth = true) => {
+  fetchData: async (link, order = "GET") => {
     set({ loading: true });
     const fullAPI = `${API}${link}`;
-    const headers = getHeaders(includeAuth);
-  
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
     try {
       const response = await fetch(fullAPI, {
         method: order,
         headers,
-        credentials: "include",
+        credentials: "include", // Cookie gönderimi için gerekli
       });
       console.log("getresponse:", response);
-  
+
       if (!response.ok) {
         let errorMsg = "Data could not be fetched";
         if (response.status === 401) {
@@ -45,7 +31,7 @@ const useAPI = create((set) => ({
         set({ error: errorMsg, loading: false });
         return;
       }
-  
+
       const data = await response.json();
       console.log("getdata:", data);
       set({ loading: false });
@@ -55,17 +41,19 @@ const useAPI = create((set) => ({
     }
   },
 
-  setData: async (link, order = "POST", newBody = {}, includeAuth = true) => {
+  setData: async (link, order = "POST", newBody = {}) => {
     set({ loading: true });
     const fullAPI = `${API}${link}`;
-    const headers = getHeaders(includeAuth);
-  
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
     try {
       const response = await fetch(fullAPI, {
         method: order,
         headers,
         body: JSON.stringify(newBody),
-        credentials: "include",
+        credentials: "include", // Cookie gönderimi için gerekli
       });
 
       if (!response.ok) {
