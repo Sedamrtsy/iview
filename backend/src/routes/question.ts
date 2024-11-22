@@ -7,7 +7,7 @@ import {
   getQuestionsByID,
   patchQuestion,
 } from "../controllers/question";
-import { verifyToken } from "../middleware/verifyToken"; // JWT doğrulama middleware
+import verifyToken from "../middleware/verifyToken"; // JWT doğrulama middleware
 
 const router = express.Router();
 
