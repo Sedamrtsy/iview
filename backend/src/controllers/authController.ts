@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import AuthService from "../services/auth"; // Default olarak AuthService import ediliyor
+import AuthService from '../services/auth';
 import jwt from "jsonwebtoken";
 
 export class AuthController {
@@ -14,7 +14,11 @@ export class AuthController {
       }
 
       // Kullanıcı doğrulandıktan sonra JWT token oluştur
-      const accessToken = AuthService.generateToken(email); // `AuthService.generateToken` kullanıyoruz.
+      const accessToken = jwt.sign(
+        { email },
+        process.env.JWT_SECRET_KEY || "defaultSecretKey",
+        { expiresIn: "30s" }
+      );
 
       const refreshToken = jwt.sign(
         { email },
@@ -42,5 +46,7 @@ export class AuthController {
     }
   }
 
-  // HandleRefreshToken ve logout metodları da aynen devam edebilir...
+  // Diğer metodlar...
 }
+
+export default AuthController;  // AuthController sınıfını varsayılan olarak ihraç ediyoruz

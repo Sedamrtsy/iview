@@ -1,8 +1,9 @@
-import express from 'express';
-import { login } from '../controllers/authController';
+import express from "express";
+import AuthController from "../controllers/authController";  // Varsayılan olarak ihraç edildiği için bu şekilde içe aktarılıyor
 
 const router = express.Router();
 
-router.post("/login", login);
+// Giriş işlemi için rota
+router.post('/login', AuthController.login);
 
 export default router;
