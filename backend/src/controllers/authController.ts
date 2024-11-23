@@ -13,17 +13,17 @@ export class AuthController {
         return;
       }
 
-      // Kullanıcı doğrulandıktan sonra JWT token oluştur
+      // Kullanıcı doğrulandıktan sonra JWT access ve refresh token oluştur
       const accessToken = jwt.sign(
         { email },
-        process.env.JWT_SECRET_KEY || "defaultSecretKey",
-        { expiresIn: "30s" }
+        process.env.JWT_SECRET || "defaultSecretKey",
+        { expiresIn: "15m" } // Access token 15 dakika geçerli
       );
 
       const refreshToken = jwt.sign(
         { email },
         process.env.JWT_REFRESH_SECRET_KEY || "defaultRefreshSecretKey",
-        { expiresIn: "1d" }
+        { expiresIn: "1d" } // Refresh token 1 gün geçerli
       );
 
       // Refresh token ve access token çerezlerde saklanıyor
@@ -36,7 +36,7 @@ export class AuthController {
       res.cookie("jwtToken", accessToken, {
         httpOnly: true,
         sameSite: "strict",
-        maxAge: 30 * 1000, // 30 saniye geçerlilik süresi
+        maxAge: 15 * 60 * 1000, // 15 dakika geçerlilik süresi
       });
 
       res.status(200).json({ message: "Logged in" });
@@ -46,7 +46,76 @@ export class AuthController {
     }
   }
 
-  // Diğer metodlar...
+  public static async handleRefreshToken(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const cookies = req.cookies;
+
+      if (!cookies?.jwt) {
+        res.status(401).json({ message: "No refresh token provided" });
+        return;
+      }
+
+      const refreshToken = cookies.jwt;
+
+      jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_SECRET_KEY || "defaultRefreshSecretKey",
+        (err: jwt.VerifyErrors | null, decoded: any) => {
+          if (err || !decoded.email) {
+            return res.status(401).json({ message: "Unauthorized" });
+          }
+
+          // Yeni access token oluştur
+          const newAccessToken = jwt.sign(
+            { email: decoded.email },
+            process.env.JWT_SECRET || "defaultSecretKey",
+            { expiresIn: "15m" }
+          );
+
+          // Yeni access token çerezde saklanır
+          res.cookie("jwtToken", newAccessToken, {
+            httpOnly: true,
+            sameSite: "strict",
+            maxAge: 15 * 60 * 1000, // 15 dakika geçerlilik süresi
+          });
+
+          res.json({ message: "Token refreshed" });
+        }
+      );
+    } catch (error) {
+      console.error("Error during refresh token:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+  public static async logout(req: Request, res: Response): Promise<void> {
+    try {
+      const cookies = req.cookies;
+
+      if (!cookies?.jwt) {
+        res.status(401).json({ message: "No token to clear" });
+        return;
+      }
+
+      res.clearCookie("jwt", {
+        httpOnly: true,
+        sameSite: "strict",
+      });
+
+      res.clearCookie("jwtToken", {
+        httpOnly: true,
+        sameSite: "strict",
+      });
+
+      res.status(200).json({ message: "Logged out" });
+    } catch (error) {
+      console.error("Error during logout:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
 }
 
-export default AuthController;  // AuthController sınıfını varsayılan olarak ihraç ediyoruz
+export default AuthController;
