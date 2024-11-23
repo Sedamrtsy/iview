@@ -14,22 +14,17 @@ import InterviewQuestions from "./pages/admin/InterviewQuestions";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [token, setToken] = React.useState(null);
 
   React.useEffect(() => {
-    // Token'ı sessionStorage'dan almak yerine login sayfasında olup olmadığını kontrol ediyoruz.
-  //   const storedToken = sessionStorage.getItem("token");
-  //   console.log("Stored Token:", storedToken);
-  //   if (!storedToken && !location.pathname.startsWith("/interviewpage")) {
-  //     navigate("/");
-  //   }
-  // }, [location.pathname, navigate]);
-
-    // Kullanıcının oturum açıp açmadığını kontrol et
-    // Eğer login değilse ve "/interviewpage" dışında bir sayfa açmak isterse, login sayfasına yönlendir
-    if (!document.cookie.includes("token") && !location.pathname.startsWith("/interviewpage")) {
+    const storedToken = sessionStorage.getItem("token");
+    if (!storedToken && !location.pathname.startsWith("/interviewpage")) {
       navigate("/");
+    } else {
+      setToken(storedToken);
     }
   }, [location.pathname, navigate]);
+  
 
   return (
     <>
@@ -38,12 +33,12 @@ function App() {
 
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/adminhomepage" element={<AdminHomePage />} />
-        <Route path="/videocollection/:id" element={<VideoCollection />} />
-        <Route path="/interviewvideo/:id/:val" element={<InterviewVideo />} />
-        <Route path="/packagelist" element={<PackageList />} />
-        <Route path="/packagequestions/:id" element={<PackageQuestionList />} />
-        <Route path="/interviewdetail/:id" element={<InterviewQuestions />} />
+        <Route path="/adminhomepage" element={token ? <AdminHomePage /> : <LoginPage />} />
+        <Route path="/videocollection/:id" element={token ? <VideoCollection /> : <LoginPage />} />
+        <Route path="/interviewvideo/:id/:val" element={token ? <InterviewVideo /> : <LoginPage />} />
+        <Route path="/packagelist" element={token ? <PackageList /> : <LoginPage />} />
+        <Route path="/packagequestions/:id" element={token ? <PackageQuestionList /> : <LoginPage />} />
+        <Route path="/interviewdetail/:id" element={token ? <InterviewQuestions /> : <LoginPage />} />
         <Route path="/interviewpage/:id" element={<InterviewPage />} />
       </Routes>
     </>
