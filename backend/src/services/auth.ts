@@ -1,16 +1,36 @@
-import jwt from 'jsonwebtoken';
+// // services/authService.ts
+// import jwt from "jsonwebtoken";
 
-class AuthService {
-  public static generateToken(userId: string) {
-    return jwt.sign({ userId }, process.env.JWT_SECRET as string, {
-      expiresIn: '1d',
-    });
+// export const authenticateUser = (email: string, password: string): boolean => {
+//   const envEmail = process.env.USER_EMAIL;
+//   const envPassword = process.env.USER_PASSWORD;
+
+//   if (email !== envEmail || password !== envPassword) {
+//     return false;
+//   }
+
+//   return true;
+// };
+
+// export const generateToken = (email: string): string => {
+//   const jwtSecret = process.env.JWT_SECRET as string;
+//   return jwt.sign({ email }, jwtSecret, { expiresIn: "1h" });
+// };
+// services/authService.ts
+import jwt from "jsonwebtoken";
+
+export const authenticateUser = (email: string, password: string): boolean => {
+  const envEmail = process.env.USER_EMAIL;
+  const envPassword = process.env.USER_PASSWORD;
+
+  if (email !== envEmail || password !== envPassword) {
+    return false;
   }
 
-  public static authenticate(email: string, password: string): boolean {
-    // Kullanıcı doğrulama işlemleri yapılmalı, burada bir örnek olarak sabit bir kontrol ekledik.
-    return email === process.env.USER_EMAIL && password === process.env.USER_PASSWORD;
-  }
-}
+  return true;
+};
 
-export default AuthService;
+export const generateToken = (email: string): string => {
+  const jwtSecret = process.env.JWT_SECRET as string;
+  return jwt.sign({ email }, jwtSecret, { expiresIn: "1h" });
+};

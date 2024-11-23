@@ -10,7 +10,8 @@ import interview from './routes/interview';
 import candidates from './routes/candidates';
 import videoRoutes from './routes/video';
 import logoutRoute from './routes/logout';
-import verifyToken from './middleware/verifyToken';
+
+import { verifyToken } from './middleware/verifyToken';
 
 
 dotenv.config();
@@ -26,7 +27,7 @@ connectDB();
 app.use(cors({
   origin: frontendURL, // İzin verilen frontend URL'si
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // İzin verilen HTTP metotları
-  allowedHeaders: ["Content-Type", "Authorization"], // Eklenen Authorization header'ı
+  allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true, // Cookie veya token göndermek için gerekli
 }));
 
@@ -43,12 +44,15 @@ app.use('/api/auth', authRoute); // Kimlik doğrulama rotası
 app.use('/api/logout', logoutRoute); // Çıkış yapma rotası
 
 // Aşağıdaki rotalar için JWT doğrulama kullanın
-app.use(verifyToken);
-app.use('/api/question', question);
-app.use('/api/package', qpackage);
-app.use('/api/interview', interview);
-app.use('/api/candidates', candidates);
-app.use('/api/videos', videoRoutes);
+// app.use(verifyToken);
+app.use('/api', authRoute);
+app.use('/api', question);
+app.use('/api', qpackage);
+app.use('/api', interview);
+app.use('/api', candidates);
+app.use('/api', videoRoutes);  // Video yükleme için eklenen yeni rota
+app.use("/api", logoutRoute);
+
 
 // 404 Hatası için varsayılan yanıt
 app.use((req, res) => {

@@ -1,121 +1,39 @@
 import { Request, Response } from "express";
-import AuthService from '../services/auth';
-import jwt from "jsonwebtoken";
+import * as authService from "../services/auth";
 
-export class AuthController {
-  public static async login(req: Request, res: Response): Promise<void> {
-    try {
-      const { email, password } = req.body;
-      const authenticated = await AuthService.authenticate(email, password);
+export const login = async (req: Request, res: Response): Promise<void> => {
+  const { email, password } = req.body;
 
-      if (!authenticated) {
-        res.status(401).json({ message: "Login failed" });
-        return;
-      }
+  try {
+    // Kullanıcıyı doğrula
+    const isAuthenticated = authService.authenticateUser(email, password);
+    if (!isAuthenticated) {
+      res.status(401).json({ msg: "Invalid credentials" });
+      return;
+    }
 
-      // Kullanıcı doğrulandıktan sonra JWT access ve refresh token oluştur
-      const accessToken = jwt.sign(
-        { email },
-        process.env.JWT_SECRET || "defaultSecretKey",
-        { expiresIn: "15m" } // Access token 15 dakika geçerli
-      );
+    // Token oluştur
+    const token = authService.generateToken(email);
 
-      const refreshToken = jwt.sign(
-        { email },
-        process.env.JWT_REFRESH_SECRET_KEY || "defaultRefreshSecretKey",
-        { expiresIn: "1d" } // Refresh token 1 gün geçerli
-      );
+    // Token'ı cookie olarak set et
+    res.cookie("token", token, {
+      httpOnly: true, // JavaScript ile erişim engellenir
+      secure: process.env.NODE_ENV === "production", // HTTPS gerektirir (production için)
+      sameSite: "strict", // CSRF koruması için sıkı mod
+      maxAge: 60 * 60 * 1000, // 1 saat geçerlilik süresi
+    });
 
-      // Refresh token ve access token çerezlerde saklanıyor
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
-        sameSite: "strict",
-        maxAge: 24 * 60 * 60 * 1000, // 1 gün geçerlilik süresi
-      });
-
-      res.cookie("jwtToken", accessToken, {
-        httpOnly: true,
-        sameSite: "strict",
-        maxAge: 15 * 60 * 1000, // 15 dakika geçerlilik süresi
-      });
-
-      res.status(200).json({ message: "Logged in" });
-    } catch (error) {
-      console.error("Error during login:", error);
-      res.status(500).json({ message: "Internal server error" });
+    res.status(200).json({
+      msg: "Login successful",
+      user: { email },
+      token, // Yanıta token'i de ekle
+    });
+  } catch (error) {
+    console.error("Login işlemi sırasında bir hata oluştu:", error);
+    if (error instanceof Error) {
+      res.status(500).json({ msg: "Server error", error: error.message });
+    } else {
+      res.status(500).json({ msg: "Bilinmeyen bir hata oluştu" });
     }
   }
-
-  public static async handleRefreshToken(
-    req: Request,
-    res: Response
-  ): Promise<void> {
-    try {
-      const cookies = req.cookies;
-
-      if (!cookies?.jwt) {
-        res.status(401).json({ message: "No refresh token provided" });
-        return;
-      }
-
-      const refreshToken = cookies.jwt;
-
-      jwt.verify(
-        refreshToken,
-        process.env.JWT_REFRESH_SECRET_KEY || "defaultRefreshSecretKey",
-        (err: jwt.VerifyErrors | null, decoded: any) => {
-          if (err || !decoded.email) {
-            return res.status(401).json({ message: "Unauthorized" });
-          }
-
-          // Yeni access token oluştur
-          const newAccessToken = jwt.sign(
-            { email: decoded.email },
-            process.env.JWT_SECRET || "defaultSecretKey",
-            { expiresIn: "15m" }
-          );
-
-          // Yeni access token çerezde saklanır
-          res.cookie("jwtToken", newAccessToken, {
-            httpOnly: true,
-            sameSite: "strict",
-            maxAge: 15 * 60 * 1000, // 15 dakika geçerlilik süresi
-          });
-
-          res.json({ message: "Token refreshed" });
-        }
-      );
-    } catch (error) {
-      console.error("Error during refresh token:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  }
-
-  public static async logout(req: Request, res: Response): Promise<void> {
-    try {
-      const cookies = req.cookies;
-
-      if (!cookies?.jwt) {
-        res.status(401).json({ message: "No token to clear" });
-        return;
-      }
-
-      res.clearCookie("jwt", {
-        httpOnly: true,
-        sameSite: "strict",
-      });
-
-      res.clearCookie("jwtToken", {
-        httpOnly: true,
-        sameSite: "strict",
-      });
-
-      res.status(200).json({ message: "Logged out" });
-    } catch (error) {
-      console.error("Error during logout:", error);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  }
-}
-
-export default AuthController;
+};
