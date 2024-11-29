@@ -20,6 +20,8 @@ const useAuthStore = create((set) => ({
       );
 
       console.log("Login successful:", response.data);
+
+      // Kullanıcı ve token bilgilerini store'a kaydet
       set({ user: response.data.user, isLoading: false });
       return true; // Giriş başarılı
     } catch (error) {
@@ -42,9 +44,13 @@ export default function LoginPage() {
   const handleLogin = async () => {
     const success = await login(email, password);
     if (success) {
-      nav("/adminhomepage"); // Giriş başarılıysa yönlendir
+      console.log("Navigating to adminhomepage"); // Kontrol için log ekle
+      nav("/adminhomepage"); // Başarılıysa yönlendir
+    } else {
+      console.error("Login failed"); // Başarısızsa hata konsola yazılır
     }
   };
+  
 
   return (
     <div className="loginBody">
