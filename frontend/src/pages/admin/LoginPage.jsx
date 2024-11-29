@@ -2,7 +2,6 @@ import * as React from "react";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
 import { create } from "zustand";
-import Cookies from "js-cookie";
 import axios from "axios";
 
 // Zustand Store
@@ -10,21 +9,22 @@ const useAuthStore = create((set) => ({
   user: null,
   error: null,
   isLoading: false,
-  token: Cookies.get("jwtToken") || null,
+ 
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
+      console.log('Attempting login with email:', email);
       const response = await axios.post(
         "https://iview.onrender.com/api/login",
         { email, password },
         { withCredentials: true }
       );
-
+      console.log("Login response:", response);
       // Giriş başarılı
-      const { token, user } = response.data;
-      Cookies.set("jwtToken", token);
-      console.log("token: ",token)
-      set({ user, token, isLoading: false });
+      setTimeout(() => {
+        // Clear form state
+        set({ email: '', password: '', error: '', isLoading: false });
+      }, 100); // Adjust timeout if needed
     } catch (error) {
       set({
         error: error.response?.data?.msg || "Login failedd",
