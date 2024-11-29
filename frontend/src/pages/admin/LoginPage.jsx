@@ -27,7 +27,7 @@ const useAuthStore = create((set) => ({
       set({ user, token, isLoading: false });
     } catch (error) {
       set({
-        error: error.response?.data?.msg || "Login failed",
+        error: error.response?.data?.msg || "Login failedd",
         isLoading: false,
       });
     }
