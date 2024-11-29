@@ -9,28 +9,26 @@ const useAuthStore = create((set) => ({
   user: null,
   error: null,
   isLoading: false,
- 
+
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
-      console.log('Attempting login with email:', email);
       const response = await axios.post(
         "https://iview.onrender.com/api/login",
         { email, password },
         { withCredentials: true }
       );
-      console.log("Login response:", response);
-      // Giriş başarılı
-      setTimeout(() => {
-        // Clear form state
-        set({ email: '', password: '', error: '', isLoading: false });
-      }, 100); // Adjust timeout if needed
-      nav("/adminhomepage");
+
+      console.log("Login successful:", response.data);
+      set({ user: response.data.user, isLoading: false });
+      return true; // Giriş başarılı
     } catch (error) {
+      console.error("Login failed:", error.response?.data || error.message);
       set({
-        error: error.response?.data?.msg || "Login failedd",
+        error: error.response?.data?.msg || "Login failed",
         isLoading: false,
       });
+      return false; // Giriş başarısız
     }
   },
 }));
@@ -42,9 +40,9 @@ export default function LoginPage() {
   const nav = useNavigate();
 
   const handleLogin = async () => {
-    await login(email, password);
-    if (!error) {
-      nav("/adminhomepage");
+    const success = await login(email, password);
+    if (success) {
+      nav("/adminhomepage"); // Giriş başarılıysa yönlendir
     }
   };
 
