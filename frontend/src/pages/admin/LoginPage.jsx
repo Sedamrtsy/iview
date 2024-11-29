@@ -1,37 +1,48 @@
 import * as React from "react";
 import "../../App.css";
 import { useNavigate } from "react-router-dom";
+import { create } from "zustand";
+import Cookies from "js-cookie";
+import axios from "axios";
+
+// Zustand Store
+const useAuthStore = create((set) => ({
+  user: null,
+  error: null,
+  isLoading: false,
+  token: Cookies.get("jwtToken") || null,
+  login: async (email, password) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.post(
+        "https://iview.onrender.com/api/login",
+        { email, password },
+        { withCredentials: true }
+      );
+
+      // Giriş başarılı
+      const { token, user } = response.data;
+      Cookies.set("jwtToken", token);
+      set({ user, token, isLoading: false });
+    } catch (error) {
+      set({
+        error: error.response?.data?.msg || "Login failed",
+        isLoading: false,
+      });
+    }
+  },
+}));
 
 export default function LoginPage() {
-  const [error, setError] = React.useState(null);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const { error, login, isLoading } = useAuthStore();
   const nav = useNavigate();
 
   const handleLogin = async () => {
-    setError(null); // Önceki hataları temizle
-    try {
-      const response = await fetch("https://iview.onrender.com/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Cookie tabanlı oturum için gerekli
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.msg || "Login failed");
-      }
-
-      // Giriş başarılı, token'ı sakla ve kullanıcıyı yönlendir
-      const data = await response.json();
-      console.log("giriş başarılı")
-      sessionStorage.setItem("token", data.token);
+    await login(email, password);
+    if (!error) {
       nav("/adminhomepage");
-    } catch (error) {
-      setError(error.message || "An unexpected error occurred.");
     }
   };
 
@@ -60,8 +71,8 @@ export default function LoginPage() {
           onKeyDown={(e) => e.key === "Enter" && handleLogin()}
         />
         <br />
-        <button className="button" onClick={handleLogin}>
-          Login
+        <button className="button" onClick={handleLogin} disabled={isLoading}>
+          {isLoading ? "Logging in..." : "Login"}
         </button>
       </div>
     </div>
