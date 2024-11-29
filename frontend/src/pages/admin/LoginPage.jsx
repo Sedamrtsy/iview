@@ -23,6 +23,7 @@ const useAuthStore = create((set) => ({
       // Giriş başarılı
       const { token, user } = response.data;
       Cookies.set("jwtToken", token);
+      console.log("token: ",token)
       set({ user, token, isLoading: false });
     } catch (error) {
       set({
