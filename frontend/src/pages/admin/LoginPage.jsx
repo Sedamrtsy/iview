@@ -25,6 +25,7 @@ const useAuthStore = create((set) => ({
         // Clear form state
         set({ email: '', password: '', error: '', isLoading: false });
       }, 100); // Adjust timeout if needed
+      nav("/adminhomepage");
     } catch (error) {
       set({
         error: error.response?.data?.msg || "Login failedd",
