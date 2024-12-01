@@ -35,6 +35,14 @@ export default function AdminHomePage() {
   const handleDelete = async (e) => {
     const takenid = e.target.value;
   
+    console.log("Silinecek mülakat ID'si:", takenid); // Bu satır eklenerek ID kontrol edilebilir
+  
+    if (!takenid) {
+      console.error("Mülakat ID'si tanımsız.");
+      alert("Geçerli bir mülakat ID'si yok.");
+      return;
+    }
+  
     try {
       const interData = await fetchData(`getinterviewbyid/${takenid}`, "GET");
       if (interData.candidates.length > 0) {
@@ -43,9 +51,7 @@ export default function AdminHomePage() {
       }
   
       const deleteResponse = await fetchData(`deleteinterview/${takenid}`, "DELETE");
-  
       if (deleteResponse.success) {
-        // Başarılıysa mülakatı listeden çıkar
         setPackages((prevPackages) => prevPackages.filter((pack) => pack._id !== takenid));
         alert("Mülakat başarıyla silindi.");
       } else {
@@ -56,6 +62,7 @@ export default function AdminHomePage() {
       alert("Bir hata oluştu, mülakat silinemedi.");
     }
   };
+  
   
 
   const handleLinkOpen = async (e) => {
