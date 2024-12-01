@@ -23,6 +23,10 @@ const useAuthStore = create((set) => ({
 
       // Kullanıcı ve token bilgilerini store'a kaydet
       set({ user: response.data.user, isLoading: false });
+
+      // Token'ı sessionStorage'a kaydet
+      sessionStorage.setItem("token", response.data.token);
+      
       return true; // Giriş başarılı
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
