@@ -34,14 +34,29 @@ export default function AdminHomePage() {
   
   const handleDelete = async (e) => {
     const takenid = e.target.value;
-    const interData = await fetchData(`getinterviewbyid/${takenid}`, "GET");
-    if (interData.candidates.length > 0) {
-      alert("Bu mülakatı silemezsiniz.");
-      return;
+  
+    try {
+      const interData = await fetchData(`getinterviewbyid/${takenid}`, "GET");
+      if (interData.candidates.length > 0) {
+        alert("Bu mülakatı silemezsiniz.");
+        return;
+      }
+  
+      const deleteResponse = await fetchData(`deleteinterview/${takenid}`, "DELETE");
+  
+      if (deleteResponse.success) {
+        // Başarılıysa mülakatı listeden çıkar
+        setPackages((prevPackages) => prevPackages.filter((pack) => pack._id !== takenid));
+        alert("Mülakat başarıyla silindi.");
+      } else {
+        throw new Error("Silme işlemi başarısız oldu.");
+      }
+    } catch (error) {
+      console.error("Mülakat silinemedi:", error);
+      alert("Bir hata oluştu, mülakat silinemedi.");
     }
-    await fetchData(`deleteinterview/${takenid}`, "DELETE"); // Silme işlemi asenkron hale getirildi.
-    //setPackages(packages.filter((pack) => pack._id !== takenid)); // Silinen paketi state'den çıkar.
   };
+  
 
   const handleLinkOpen = async (e) => {
     const link = e.target.value;
